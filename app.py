@@ -293,8 +293,8 @@ else:
             margin=dict(l=0, r=0, b=0, t=30)
         )
         
-        # Display the 3D plot
-        st.plotly_chart(fig, use_container_width=True)
+        # Display the 3D plot with a unique key
+        st.plotly_chart(fig, use_container_width=True, key="main_chart")
         
         # Add interactive controls for visualization options
         cols = st.columns(3)
@@ -310,7 +310,8 @@ else:
             fig.update_traces(text=None, mode='markers')
         fig.update_traces(marker=dict(size=marker_size, opacity=opacity))
         
-        st.plotly_chart(fig, use_container_width=True)
+        # Display the updated 3D plot with a different unique key
+        st.plotly_chart(fig, use_container_width=True, key="updated_chart")
     
     with tab2:
         st.subheader("Exploring Word Relationships")
@@ -394,7 +395,8 @@ else:
                     margin=dict(l=0, r=0, b=0, t=30)
                 )
                 
-                st.plotly_chart(analogy_fig, use_container_width=True)
+                # Use a unique key for the analogy chart
+                st.plotly_chart(analogy_fig, use_container_width=True, key="analogy_chart")
                 
                 # Compute and show analogies
                 with st.spinner("Computing word analogies..."):
@@ -473,7 +475,8 @@ else:
                     margin=dict(l=0, r=0, t=40, b=0)
                 )
                 
-                st.plotly_chart(similarity_fig, use_container_width=True)
+                # Use a unique key for the similarity chart
+                st.plotly_chart(similarity_fig, use_container_width=True, key="similarity_chart")
                 
                 # Also show the words in the 3D space with the target highlighted
                 highlight_fig = go.Figure(data=[go.Scatter3d(
@@ -539,14 +542,15 @@ else:
                     margin=dict(l=0, r=0, b=0, t=30)
                 )
                 
-                st.plotly_chart(highlight_fig, use_container_width=True)
+                # Use a unique key for the highlight chart
+                st.plotly_chart(highlight_fig, use_container_width=True, key="highlight_chart")
 
     # Educational section
     with st.expander("How to interpret this visualisation"):
         st.markdown("""
         ### Understanding Word Embeddings in 3D
         
-        This visualisation shows how words are related to each other in the vector space of a language model.
+        This visualisation shows how language models understand relationships between words by representing them in the vector space of a language model.
         
         - **Words that are close together** in this 3D space have similar meanings or are used in similar contexts
         - **The coloured points** represent individual words
