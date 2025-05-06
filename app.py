@@ -295,23 +295,6 @@ else:
         
         # Display the 3D plot with a unique key
         st.plotly_chart(fig, use_container_width=True, key="main_chart")
-        
-        # Add interactive controls for visualization options
-        cols = st.columns(3)
-        with cols[0]:
-            show_labels = st.checkbox("Show word labels", value=True)
-        with cols[1]:
-            marker_size = st.slider("Point size", 3, 15, 8)
-        with cols[2]:
-            opacity = st.slider("Opacity", 0.1, 1.0, 0.8, 0.1)
-        
-        # Update visualization based on controls
-        if not show_labels:
-            fig.update_traces(text=None, mode='markers')
-        fig.update_traces(marker=dict(size=marker_size, opacity=opacity))
-        
-        # Display the updated 3D plot with a different unique key
-        st.plotly_chart(fig, use_container_width=True, key="updated_chart")
     
     with tab2:
         st.subheader("Exploring Word Relationships")
