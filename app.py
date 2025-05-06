@@ -88,15 +88,27 @@ def generate_embeddings():
     # Common words for demonstration
     common_words = [
         # Gender & Royalty
-        "king", "queen", "man", "woman", "prince", "princess", "boy", "girl", "emperor", "empress", "duke", "duchess",
+        "king", "queen", "man", "woman", "prince", "princess", "boy", "girl", 
+        "emperor", "empress", "duke", "duchess", "lord", "lady",
+        
         # Countries & Capitals
-        "france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome", "spain", "madrid", "china", "beijing", "russia", "moscow", "brazil", "brasilia", "australia", "canberra", "canada", "ottawa",
-        # Car brands, powertrain, size
-        "toyota", "hybrid", "midsize", "honda", "gasoline", "compact", "tesla", "electric", "fullsize", "ford", "diesel", "suv", "bmw", "gasoline", "luxury", "mercedes", "hybrid", "sedan", "audi", "electric", "sports", "volkswagen", "diesel", "hatchback", "porsche", "gasoline", "coupe", "jeep", "diesel", "offroad",
+        "france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome",
+        "spain", "madrid", "china", "beijing", "russia", "moscow", "brazil", "brasilia",
+        "australia", "canberra", "canada", "ottawa",
+        
+        # Car brands with clear attributes
+        "toyota", "honda", "ford", "volkswagen", "bmw", "mercedes", "audi", "porsche",
+        "tesla", "jeep", "hybrid", "electric", "gasoline", "diesel", "compact", "midsize",
+        "suv", "luxury", "sports",
+        
         # Animals & Babies
-        "dog", "puppy", "cat", "kitten", "horse", "foal", "cow", "calf", "sheep", "lamb", "goat", "kid", "lion", "cub", "tiger", "cub", "bear", "cub", "deer", "fawn", "kangaroo", "joey", "swan", "cygnet",
-        # Sports, clubs, balls
-        "football", "manchester", "soccer", "basketball", "lakers", "basketball", "baseball", "yankees", "baseball", "tennis", "wimbledon", "tennis", "golf", "augusta", "golf", "cricket", "india", "cricket", "rugby", "allblacks", "rugby", "hockey", "redwings", "puck", "volleyball", "brazil", "volleyball"
+        "dog", "puppy", "cat", "kitten", "horse", "foal", "cow", "calf",
+        "sheep", "lamb", "goat", "kid", "lion", "cub", "tiger", "bear",
+        "deer", "fawn", "kangaroo", "joey", "swan", "cygnet", "elephant", "calf",
+        
+        # Sports & Equipment
+        "soccer", "basketball", "tennis", "golf", "hockey", "cricket", "rugby",
+        "goal", "net", "racket", "club", "stick", "puck", "hoop", "bat"
     ]
     
     # For demonstration, we'll create "meaningful" embeddings for certain relationships
@@ -118,9 +130,7 @@ def generate_embeddings():
     gasoline_vec = np.random.normal(0, 1, dim)
     diesel_vec = np.random.normal(0, 1, dim)
     hybrid_vec = np.random.normal(0, 1, dim)
-    compact_vec = np.random.normal(0, 1, dim)
-    midsize_vec = np.random.normal(0, 1, dim)
-    fullsize_vec = np.random.normal(0, 1, dim)
+    size_vec = np.random.normal(0, 1, dim)
     luxury_vec = np.random.normal(0, 1, dim)
     
     # Animal related vectors
@@ -129,117 +139,97 @@ def generate_embeddings():
     
     # Sports related vectors
     sport_vec = np.random.normal(0, 1, dim)
-    club_vec = np.random.normal(0, 1, dim)
-    ball_vec = np.random.normal(0, 1, dim)
+    equipment_vec = np.random.normal(0, 1, dim)
     
     # Create semantic relationships
-    # Gender & Royalty
-    word_to_vec["man"] = male_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["woman"] = female_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["king"] = male_vec + royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["queen"] = female_vec + royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["prince"] = male_vec + 0.8 * royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["princess"] = female_vec + 0.8 * royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["boy"] = 0.7 * male_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["girl"] = 0.7 * female_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["emperor"] = male_vec + 1.2 * royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["empress"] = female_vec + 1.2 * royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["duke"] = male_vec + 0.6 * royalty_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["duchess"] = female_vec + 0.6 * royalty_vec + 0.1 * np.random.normal(0, 1, dim)
+    # Gender & Royalty - Enhanced relationships
+    word_to_vec.update({
+        "man": male_vec + 0.1 * np.random.normal(0, 1, dim),
+        "woman": female_vec + 0.1 * np.random.normal(0, 1, dim),
+        "king": male_vec + royalty_vec * 1.2,
+        "queen": female_vec + royalty_vec * 1.2,
+        "prince": male_vec + royalty_vec * 0.9,
+        "princess": female_vec + royalty_vec * 0.9,
+        "emperor": male_vec + royalty_vec * 1.5 + country_vec * 0.3,
+        "empress": female_vec + royalty_vec * 1.5 + country_vec * 0.3,
+        "duke": male_vec + royalty_vec * 0.7 + country_vec * 0.2,
+        "duchess": female_vec + royalty_vec * 0.7 + country_vec * 0.2,
+        "lord": male_vec + royalty_vec * 0.5,
+        "lady": female_vec + royalty_vec * 0.5
+    })
     
     # Countries & capitals with meaningful relationships
-    word_to_vec["france"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["paris"] = capital_vec + 0.8 * word_to_vec["france"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["germany"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["berlin"] = capital_vec + 0.8 * word_to_vec["germany"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["japan"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["tokyo"] = capital_vec + 0.8 * word_to_vec["japan"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["italy"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["rome"] = capital_vec + 0.8 * word_to_vec["italy"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["spain"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["madrid"] = capital_vec + 0.8 * word_to_vec["spain"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["china"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["beijing"] = capital_vec + 0.8 * word_to_vec["china"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["russia"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["moscow"] = capital_vec + 0.8 * word_to_vec["russia"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["brazil"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["brasilia"] = capital_vec + 0.8 * word_to_vec["brazil"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["australia"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["canberra"] = capital_vec + 0.8 * word_to_vec["australia"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["canada"] = country_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["ottawa"] = capital_vec + 0.8 * word_to_vec["canada"] + 0.1 * np.random.normal(0, 1, dim)
+    for country, capital in [("france", "paris"), ("germany", "berlin"), ("japan", "tokyo"),
+                            ("italy", "rome"), ("spain", "madrid"), ("china", "beijing"),
+                            ("russia", "moscow"), ("brazil", "brasilia"), ("australia", "canberra"),
+                            ("canada", "ottawa")]:
+        country_vector = country_vec + np.random.normal(0, 0.1, dim)
+        word_to_vec[country] = country_vector
+        word_to_vec[capital] = capital_vec + 0.8 * country_vector
     
-    # Car brands, powertrain, size
-    word_to_vec["toyota"] = car_brand_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["hybrid"] = hybrid_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["midsize"] = midsize_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["honda"] = car_brand_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["gasoline"] = gasoline_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["compact"] = compact_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["tesla"] = car_brand_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["electric"] = electric_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["fullsize"] = fullsize_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["ford"] = car_brand_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["diesel"] = diesel_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["suv"] = fullsize_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["bmw"] = car_brand_vec + luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["luxury"] = luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["mercedes"] = car_brand_vec + luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["sedan"] = midsize_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["audi"] = car_brand_vec + luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["sports"] = luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["volkswagen"] = car_brand_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["hatchback"] = compact_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["porsche"] = car_brand_vec + luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["coupe"] = compact_vec + luxury_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["jeep"] = car_brand_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["offroad"] = fullsize_vec + 0.1 * np.random.normal(0, 1, dim)
+    # Car brands with specific attributes
+    car_attributes = {
+        "toyota": hybrid_vec * 0.7 + size_vec * 0.5,
+        "honda": hybrid_vec * 0.6 + size_vec * 0.4,
+        "ford": gasoline_vec * 0.8 + size_vec * 0.6,
+        "volkswagen": diesel_vec * 0.7 + size_vec * 0.5,
+        "bmw": luxury_vec * 1.0 + gasoline_vec * 0.6,
+        "mercedes": luxury_vec * 1.1 + diesel_vec * 0.5,
+        "audi": luxury_vec * 0.9 + gasoline_vec * 0.7,
+        "porsche": luxury_vec * 1.2 + sports_vec * 0.8,
+        "tesla": electric_vec * 1.5 + luxury_vec * 0.7,
+        "jeep": diesel_vec * 0.9 + size_vec * 0.8
+    }
+    for brand, attributes in car_attributes.items():
+        word_to_vec[brand] = car_brand_vec + attributes
     
-    # Animals & Babies
-    word_to_vec["dog"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["puppy"] = animal_vec + baby_vec + 0.8 * word_to_vec["dog"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["cat"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["kitten"] = animal_vec + baby_vec + 0.8 * word_to_vec["cat"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["horse"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["foal"] = animal_vec + baby_vec + 0.8 * word_to_vec["horse"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["cow"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["calf"] = animal_vec + baby_vec + 0.8 * word_to_vec["cow"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["sheep"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["lamb"] = animal_vec + baby_vec + 0.8 * word_to_vec["sheep"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["goat"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["kid"] = animal_vec + baby_vec + 0.8 * word_to_vec["goat"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["lion"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["tiger"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["cub"] = animal_vec + baby_vec + 0.4 * (word_to_vec["lion"] + word_to_vec["tiger"]) + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["bear"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["deer"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["fawn"] = animal_vec + baby_vec + 0.8 * word_to_vec["deer"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["kangaroo"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["joey"] = animal_vec + baby_vec + 0.8 * word_to_vec["kangaroo"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["swan"] = animal_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["cygnet"] = animal_vec + baby_vec + 0.8 * word_to_vec["swan"] + 0.1 * np.random.normal(0, 1, dim)
+    # Car features
+    word_to_vec.update({
+        "hybrid": hybrid_vec * 1.2,
+        "electric": electric_vec * 1.3,
+        "gasoline": gasoline_vec * 1.1,
+        "diesel": diesel_vec * 1.1,
+        "compact": size_vec * 0.3,
+        "midsize": size_vec * 0.6,
+        "suv": size_vec * 0.9,
+        "luxury": luxury_vec * 1.0,
+        "sports": luxury_vec * 0.8 + size_vec * 0.5
+    })
     
-    # Sports, clubs, balls
-    word_to_vec["football"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["manchester"] = club_vec + 0.8 * word_to_vec["football"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["soccer"] = ball_vec + 0.8 * word_to_vec["football"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["basketball"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["lakers"] = club_vec + 0.8 * word_to_vec["basketball"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["baseball"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["yankees"] = club_vec + 0.8 * word_to_vec["baseball"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["tennis"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["wimbledon"] = club_vec + 0.8 * word_to_vec["tennis"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["golf"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["augusta"] = club_vec + 0.8 * word_to_vec["golf"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["cricket"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["india"] = club_vec + 0.8 * word_to_vec["cricket"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["rugby"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["allblacks"] = club_vec + 0.8 * word_to_vec["rugby"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["hockey"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["redwings"] = club_vec + 0.8 * word_to_vec["hockey"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["puck"] = ball_vec + 0.8 * word_to_vec["hockey"] + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["volleyball"] = sport_vec + 0.1 * np.random.normal(0, 1, dim)
-    word_to_vec["brazil"] = club_vec + 0.4 * (word_to_vec["volleyball"] + word_to_vec["football"]) + 0.1 * np.random.normal(0, 1, dim)
+    # Animals & Babies - Enhanced relationships
+    animals = {
+        "dog": ("puppy", 0.9),
+        "cat": ("kitten", 0.85),
+        "horse": ("foal", 0.88),
+        "cow": ("calf", 0.92),
+        "sheep": ("lamb", 0.87),
+        "goat": ("kid", 0.84),
+        "lion": ("cub", 0.95),
+        "bear": ("cub", 0.93),
+        "deer": ("fawn", 0.89),
+        "kangaroo": ("joey", 0.91),
+        "swan": ("cygnet", 0.86),
+        "elephant": ("calf", 0.90)
+    }
+    for animal, (baby, strength) in animals.items():
+        animal_vector = animal_vec + np.random.normal(0, 0.1, dim)
+        word_to_vec[animal] = animal_vector
+        word_to_vec[baby] = animal_vector * strength + baby_vec
+    
+    # Sports & Equipment - Updated with equipment focus
+    sports = {
+        "soccer": ("goal", "net"),
+        "basketball": ("hoop",),
+        "tennis": ("racket",),
+        "golf": ("club",),
+        "hockey": ("stick", "puck"),
+        "cricket": ("bat",)
+    }
+    for sport, equipment in sports.items():
+        sport_vector = sport_vec + np.random.normal(0, 0.1, dim)
+        word_to_vec[sport] = sport_vector
+        for item in equipment:
+            word_to_vec[item] = equipment_vec + 0.8 * sport_vector
     
     # Fill in remaining words with random vectors
     for word in common_words:
@@ -268,11 +258,11 @@ with st.sidebar:
     
     # Default word sets for different demonstrations
     word_sets = {
-        "Gender & Royalty": ["king", "queen", "man", "woman", "prince", "princess", "boy", "girl", "emperor", "empress", "duke", "duchess"],
-        "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome", "spain", "madrid", "china", "beijing", "russia", "moscow", "brazil", "brasilia", "australia", "canberra", "canada", "ottawa"],
-        "Car Brands, Powertrain, Size": ["toyota", "hybrid", "midsize", "honda", "gasoline", "compact", "tesla", "electric", "fullsize", "ford", "diesel", "suv", "bmw", "luxury", "mercedes", "sedan", "audi", "sports", "volkswagen", "hatchback", "porsche", "coupe", "jeep", "offroad"],
-        "Animals & Babies": ["dog", "puppy", "cat", "kitten", "horse", "foal", "cow", "calf", "sheep", "lamb", "goat", "kid", "lion", "tiger", "cub", "bear", "deer", "fawn", "kangaroo", "joey", "swan", "cygnet"],
-        "Sports, Clubs & Balls": ["football", "manchester", "soccer", "basketball", "lakers", "baseball", "yankees", "tennis", "wimbledon", "golf", "augusta", "cricket", "india", "rugby", "allblacks", "hockey", "redwings", "puck", "volleyball", "brazil"]
+        "Gender & Royalty": ["king", "queen", "emperor", "empress", "prince", "princess", "duke", "duchess"],
+        "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome"],
+        "Car Brands & Features": ["toyota", "honda", "tesla", "bmw", "hybrid", "electric", "gasoline", "luxury"],
+        "Animals & Babies": ["dog", "puppy", "cat", "kitten", "lion", "cub", "elephant", "calf"],
+        "Sports & Equipment": ["soccer", "goal", "basketball", "hoop", "tennis", "racket", "hockey", "stick"]
     }
     
     selected_set = st.selectbox("Choose a word set", options=list(word_sets.keys()))
