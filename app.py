@@ -20,6 +20,25 @@ st.markdown("""
 <style>
     .main .block-container {padding-top: 2rem;}
     h1, h2, h3 {color: #1E3A8A;}
+    .stTabs > div > button {
+        font-size: 1.1rem;
+        padding: 0.8rem 1.5rem;
+        border: 2px solid #1E3A8A;
+        border-radius: 8px;
+        margin: 0 0.5rem;
+        transition: all 0.3s ease;
+    }
+    .stTabs > div > button:hover {
+        background-color: #3B82F6;
+        color: white;
+        transform: translateY(-2px);
+    }
+    .stTabs > div > button[aria-selected="true"] {
+        background-color: #1E3A8A !important;
+        color: white !important;
+        border-color: #1E3A8A;
+        font-weight: bold;
+    }
     .stButton>button {background-color: #1E3A8A; color: white;}
     .stButton>button:hover {background-color: #3B82F6;}
     .st-emotion-cache-16txtl3 h1 {font-size: 2.5rem; margin-bottom: 0.5rem;}
@@ -250,10 +269,10 @@ with st.sidebar:
     # Default word sets for different demonstrations
     word_sets = {
         "Gender & Royalty": ["king", "queen", "man", "woman", "prince", "princess", "boy", "girl", "emperor", "empress", "duke", "duchess"],
-        "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome", "spain", "madrid", "china", "beijing"],
-        "Car Brands, Powertrain, Size": ["toyota", "hybrid", "midsize", "honda", "gasoline", "compact", "tesla", "electric", "fullsize", "ford", "diesel", "suv"],
-        "Animals & Babies": ["dog", "puppy", "cat", "kitten", "horse", "foal", "cow", "calf", "sheep", "lamb", "goat", "kid"],
-        "Sports, Clubs & Balls": ["football", "manchester", "soccer", "basketball", "lakers", "basketball", "baseball", "yankees", "baseball", "tennis", "wimbledon", "tennis"]
+        "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome", "spain", "madrid", "china", "beijing", "russia", "moscow", "brazil", "brasilia", "australia", "canberra", "canada", "ottawa"],
+        "Car Brands, Powertrain, Size": ["toyota", "hybrid", "midsize", "honda", "gasoline", "compact", "tesla", "electric", "fullsize", "ford", "diesel", "suv", "bmw", "luxury", "mercedes", "sedan", "audi", "sports", "volkswagen", "hatchback", "porsche", "coupe", "jeep", "offroad"],
+        "Animals & Babies": ["dog", "puppy", "cat", "kitten", "horse", "foal", "cow", "calf", "sheep", "lamb", "goat", "kid", "lion", "tiger", "cub", "bear", "deer", "fawn", "kangaroo", "joey", "swan", "cygnet"],
+        "Sports, Clubs & Balls": ["football", "manchester", "soccer", "basketball", "lakers", "baseball", "yankees", "tennis", "wimbledon", "golf", "augusta", "cricket", "india", "rugby", "allblacks", "hockey", "redwings", "puck", "volleyball", "brazil"]
     }
     
     selected_set = st.selectbox("Choose a word set", options=list(word_sets.keys()))
@@ -617,44 +636,3 @@ else:
         
         This is why LLMs can make analogies and understand relationships!
         """)
-
-# Deployment instructions at the bottom
-with st.expander("Deployment Instructions"):
-    st.markdown("""
-    ### How to Deploy This App on GitHub and Streamlit
-    
-    1. **Create a GitHub repository**:
-       - Create a new repository on GitHub
-       - Clone it to your local machine
-    
-    2. **Set up the project structure**:
-       - Save this code as `app.py`
-       - Create a `requirements.txt` file with these dependencies:
-         ```
-         streamlit>=1.22.0
-         plotly>=5.14.0
-         numpy>=1.24.0
-         scikit-learn>=1.2.0
-         pandas>=1.5.0
-         ```
-    
-    3. **Push to GitHub**:
-       - Add and commit your files
-       - Push to your GitHub repository
-    
-    4. **Deploy on Streamlit Cloud**:
-       - Go to [Streamlit Cloud](https://streamlit.io/cloud)
-       - Sign in with your GitHub account
-       - Choose your repository, branch, and the main file (`app.py`)
-       - Deploy!
-       
-    Your app will be deployed with a public URL that you can share with others or embed in presentations.
-    """)
-
-# Add a footer with additional resources
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center">
-    <p>Created for an AI educational presentation | <a href="https://github.com/yourusername/your-repo">GitHub Repository</a></p>
-</div>
-""", unsafe_allow_html=True)
