@@ -3,7 +3,6 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 import time
 import json
 import os
@@ -62,27 +61,12 @@ with st.expander("About this application", expanded=True):
     4. Try the analogy feature to see how the model completes patterns like "king is to man as queen is to woman"
     """)
 
-# Pre-computed GloVe embeddings
-@st.cache_data
-def load_embeddings():
-    # Check if pre-computed embeddings exist
-    if os.path.exists('glove_embeddings.csv'):
-        try:
-            # Load from CSV
-            df = pd.read_csv('glove_embeddings.csv', index_col=0)
-            word_to_vec = {word: np.array(eval(vec_str)) for word, vec_str in 
-                          zip(df.index, df['vector'])}
-            return word_to_vec
-        except Exception as e:
-            st.error(f"Error loading pre-computed embeddings: {e}")
-            return generate_embeddings()
-    else:
-        return generate_embeddings()
+# Print current working directory for debugging
+st.write(f"Current working directory: {os.getcwd()}")
 
-@st.cache_data
+# Generate embeddings directly, no caching or file reading/writing
 def generate_embeddings():
-    """Generate some pre-computed embeddings for common words using random vectors.
-       In a real app, you would use pre-trained embeddings like GloVe or Word2Vec."""
+    """Generate embeddings for common words using random vectors with meaningful relationships."""
     np.random.seed(42)  # For reproducibility
     
     # Common words for demonstration
@@ -170,8 +154,7 @@ def generate_embeddings():
         word_to_vec[country] = country_vector
         word_to_vec[capital] = capital_vec + 0.8 * country_vector
     
-    # Car brands with specific attributes - THIS IS THE FIRST FIX:
-    # Changed from car_attributes = ({...}) to word_to_vec.update({...})
+    # Car brands with specific attributes
     word_to_vec.update({
         # Japanese brands
         "toyota": car_brand_vec + japanese_vec * 1.2,
@@ -193,46 +176,6 @@ def generate_embeddings():
         "chevrolet": car_brand_vec + american_vec * 1.2
     })
     
-    # Car brands with nationalities - similar to the country/capital pattern
-    car_countries = [
-        ("germany", "bmw"),
-        ("germany", "mercedes"),
-        ("germany", "audi"), 
-        ("germany", "volkswagen"),
-        ("germany", "porsche"),
-        ("japan", "toyota"),
-        ("japan", "honda"),
-        ("japan", "lexus"),
-        ("japan", "nissan"),
-        ("japan", "mazda"),
-        ("usa", "ford"),
-        ("usa", "chevrolet"),
-        ("usa", "tesla")
-    ]
-
-    # Add countries if they're not already defined
-    for country, _ in car_countries:
-        if country not in word_to_vec:
-            country_vector = country_vec + np.random.normal(0, 0.1, dim)
-            word_to_vec[country] = country_vector
-
-    # Now add car brands with vectors influenced by their country
-    # SECOND FIX: We'll skip brands that are already defined above
-    for country, brand in car_countries:
-        if brand not in word_to_vec:  # Skip if already defined
-            country_vector = word_to_vec[country]
-            brand_vector = car_brand_vec + 0.8 * country_vector + np.random.normal(0, 0.1, dim)
-            
-            # Add some special characteristics for certain brands
-            if brand == "bmw" or brand == "mercedes" or brand == "audi" or brand == "lexus":
-                brand_vector += 0.4 * luxury_vec
-            elif brand == "porsche":
-                brand_vector += 0.6 * sports_vec
-            elif brand == "tesla":
-                brand_vector += 0.7 * electric_vec
-            
-            word_to_vec[brand] = brand_vector
-            
     # Animals & Babies - Enhanced relationships
     animals = {
         "dog": ("puppy", 0.9),
@@ -277,17 +220,10 @@ def generate_embeddings():
     for word in word_to_vec:
         word_to_vec[word] = word_to_vec[word] / np.linalg.norm(word_to_vec[word])
     
-    # Save to CSV for future use
-    df = pd.DataFrame({
-        'vector': [str(list(vec)) for vec in word_to_vec.values()]
-    }, index=list(word_to_vec.keys()))
-    
-    df.to_csv('glove_embeddings.csv')
-    
     return word_to_vec
 
-# Load embeddings
-word_to_vec = load_embeddings()
+# Generate the word vectors
+word_to_vec = generate_embeddings()
 
 # Sidebar - Word input section
 with st.sidebar:
@@ -316,6 +252,9 @@ with st.sidebar:
         options=["PCA"],
         help="PCA captures the main variance in the data"
     )
+
+# Debug: Display all available vectors
+st.expander("Debug: Available Word Vectors").write(sorted(list(word_to_vec.keys())))
 
 # Get word vectors for visualization
 word_vectors = []
