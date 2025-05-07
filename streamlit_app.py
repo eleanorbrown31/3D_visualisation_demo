@@ -259,7 +259,7 @@ with st.sidebar:
     
     # Default word sets for different demonstrations
     word_sets = {
-        "Gender & Royalty": ["king", "queen", "emperor", "empress", "prince", "princess", "duke", "duchess"],
+        "Gender & Royalty": ["king", "queen", "man", "woman", "prince", "princess", "boy", "girl"],
         "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome"],
         "Car Brands & Features": ["toyota", "honda", "tesla", "bmw", "hybrid", "electric", "gasoline", "luxury"],
         "Animals & Babies": ["dog", "puppy", "cat", "kitten", "lion", "cub", "elephant", "calf"],
