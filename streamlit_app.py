@@ -126,13 +126,13 @@ def generate_embeddings():
     
     # Car related vectors
     car_brand_vec = np.random.normal(0, 1, dim)
-    electric_vec = np.random.normal(0, 1, dim)
-    gasoline_vec = np.random.normal(0, 1, dim)
-    diesel_vec = np.random.normal(0, 1, dim)
-    hybrid_vec = np.random.normal(0, 1, dim)
-    size_vec = np.random.normal(0, 1, dim)
-    luxury_vec = np.random.normal(0, 1, dim)
-    sports_vec = np.random.normal(0, 1, dim)
+    german_vec = np.random.normal(0, 1, dim)
+    japanese_vec = np.random.normal(0, 1, dim)
+    american_vec = np.random.normal(0, 1, dim)
+    sports_vec = np.random.normal(0, 1, dim) 
+    suv_model_vec = np.random.normal(0, 1, dim)
+    sedan_model_vec = np.random.normal(0, 1, dim)
+    sports_model_vec = np.random.normal(0, 1, dim)
     
     # Animal related vectors
     animal_vec = np.random.normal(0, 1, dim)
@@ -169,32 +169,24 @@ def generate_embeddings():
         word_to_vec[capital] = capital_vec + 0.8 * country_vector
     
     # Car brands with specific attributes
-    car_attributes = {
-        "toyota": hybrid_vec * 0.7 + size_vec * 0.5,
-        "honda": hybrid_vec * 0.6 + size_vec * 0.4,
-        "ford": gasoline_vec * 0.8 + size_vec * 0.6,
-        "volkswagen": diesel_vec * 0.7 + size_vec * 0.5,
-        "bmw": luxury_vec * 1.0 + gasoline_vec * 0.6,
-        "mercedes": luxury_vec * 1.1 + diesel_vec * 0.5,
-        "audi": luxury_vec * 0.9 + gasoline_vec * 0.7,
-        "porsche": luxury_vec * 1.2 + sports_vec * 0.8,
-        "tesla": electric_vec * 1.5 + luxury_vec * 0.7,
-        "jeep": diesel_vec * 0.9 + size_vec * 0.8
-    }
-    for brand, attributes in car_attributes.items():
-        word_to_vec[brand] = car_brand_vec + attributes
+    car_attributes = ({
+        "toyota": japanese_vec * 1.2 + sedan_model_vec * 0.8 + hybrid_vec * 0.7,
+        "honda": japanese_vec * 1.2 + sedan_model_vec * 0.7 + hybrid_vec * 0.6,
+        "lexus": japanese_vec * 1.1 + luxury_vec * 0.9 + sedan_model_vec * 0.6,
+        "nissan": japanese_vec * 1.2 + sedan_model_vec * 0.8 + gasoline_vec * 0.6,
+        "mazda": japanese_vec * 1.1 + sports_model_vec * 0.6 + gasoline_vec * 0.7,
     
-    # Car features
-    word_to_vec.update({
-        "hybrid": hybrid_vec * 1.2,
-        "electric": electric_vec * 1.3,
-        "gasoline": gasoline_vec * 1.1,
-        "diesel": diesel_vec * 1.1,
-        "compact": size_vec * 0.3,
-        "midsize": size_vec * 0.6,
-        "suv": size_vec * 0.9,
-        "luxury": luxury_vec * 1.0,
-        "sports": luxury_vec * 0.8 + size_vec * 0.5
+    # German brands
+        "bmw": german_vec * 1.2 + luxury_vec * 1.0 + sports_model_vec * 0.7,
+        "mercedes": german_vec * 1.2 + luxury_vec * 1.1 + sedan_model_vec * 0.8,
+        "audi": german_vec * 1.2 + luxury_vec * 0.9 + sports_model_vec * 0.6,
+        "porsche": german_vec * 1.1 + luxury_vec * 0.8 + sports_model_vec * 1.2,
+        "volkswagen": german_vec * 1.3 + gasoline_vec * 0.7 + sedan_model_vec * 0.6,
+    
+    # Other notable brands
+        "tesla": american_vec * 0.8 + electric_vec * 1.5 + luxury_vec * 0.7,
+        "ford": american_vec * 1.2 + gasoline_vec * 0.8 + suv_model_vec * 0.7,
+        "jeep": american_vec * 1.1 + diesel_vec * 0.7 + suv_model_vec * 1.2
     })
     
     # Animals & Babies - Enhanced relationships
@@ -261,7 +253,7 @@ with st.sidebar:
     word_sets = {
         "Gender & Royalty": ["king", "queen", "man", "woman", "prince", "princess", "boy", "girl"],
         "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome"],
-        "Car Brands & Features": ["toyota", "honda", "tesla", "bmw", "hybrid", "electric", "gasoline", "luxury"],
+        "Car Brands by Nationality": ["bmw", "mercedes", "audi", "volkswagen", "toyota", "honda", "lexus", "nissan"],
         "Animals & Babies": ["dog", "puppy", "cat", "kitten", "lion", "cub", "elephant", "calf"],
         "Sports & Equipment": ["soccer", "goal", "basketball", "hoop", "tennis", "racket", "hockey", "stick"]
     }
