@@ -97,9 +97,10 @@ def generate_embeddings():
         "australia", "canberra", "canada", "ottawa",
         
         # Car brands with clear attributes
-        "toyota", "honda", "ford", "volkswagen", "bmw", "mercedes", "audi", "porsche",
-        "tesla", "jeep", "hybrid", "electric", "gasoline", "diesel", "compact", "midsize",
-        "suv", "luxury", "sports",
+        "toyota", "honda", "lexus", "nissan", "mazda",  # Japanese
+        "bmw", "mercedes", "audi", "porsche", "volkswagen",  # German
+        "tesla", "ford", "chevrolet",  # American
+        "hybrid", "electric", "gasoline", "diesel", "luxury", "sports",
         
         # Animals & Babies
         "dog", "puppy", "cat", "kitten", "horse", "foal", "cow", "calf",
@@ -126,13 +127,18 @@ def generate_embeddings():
     
     # Car related vectors
     car_brand_vec = np.random.normal(0, 1, dim)
+    electric_vec = np.random.normal(0, 1, dim)
+    gasoline_vec = np.random.normal(0, 1, dim)
+    diesel_vec = np.random.normal(0, 1, dim)
+    hybrid_vec = np.random.normal(0, 1, dim)
+    size_vec = np.random.normal(0, 1, dim)
+    luxury_vec = np.random.normal(0, 1, dim)
+    sports_vec = np.random.normal(0, 1, dim)  # Add this missing vector
+
+# Add nationality vectors
     german_vec = np.random.normal(0, 1, dim)
     japanese_vec = np.random.normal(0, 1, dim)
     american_vec = np.random.normal(0, 1, dim)
-    sports_vec = np.random.normal(0, 1, dim) 
-    suv_model_vec = np.random.normal(0, 1, dim)
-    sedan_model_vec = np.random.normal(0, 1, dim)
-    sports_model_vec = np.random.normal(0, 1, dim)
     
     # Animal related vectors
     animal_vec = np.random.normal(0, 1, dim)
@@ -170,23 +176,24 @@ def generate_embeddings():
     
     # Car brands with specific attributes
     car_attributes = ({
-        "toyota": japanese_vec * 1.2 + sedan_model_vec * 0.8 + hybrid_vec * 0.7,
-        "honda": japanese_vec * 1.2 + sedan_model_vec * 0.7 + hybrid_vec * 0.6,
-        "lexus": japanese_vec * 1.1 + luxury_vec * 0.9 + sedan_model_vec * 0.6,
-        "nissan": japanese_vec * 1.2 + sedan_model_vec * 0.8 + gasoline_vec * 0.6,
-        "mazda": japanese_vec * 1.1 + sports_model_vec * 0.6 + gasoline_vec * 0.7,
-    
-    # German brands
-        "bmw": german_vec * 1.2 + luxury_vec * 1.0 + sports_model_vec * 0.7,
-        "mercedes": german_vec * 1.2 + luxury_vec * 1.1 + sedan_model_vec * 0.8,
-        "audi": german_vec * 1.2 + luxury_vec * 0.9 + sports_model_vec * 0.6,
-        "porsche": german_vec * 1.1 + luxury_vec * 0.8 + sports_model_vec * 1.2,
-        "volkswagen": german_vec * 1.3 + gasoline_vec * 0.7 + sedan_model_vec * 0.6,
-    
-    # Other notable brands
-        "tesla": american_vec * 0.8 + electric_vec * 1.5 + luxury_vec * 0.7,
-        "ford": american_vec * 1.2 + gasoline_vec * 0.8 + suv_model_vec * 0.7,
-        "jeep": american_vec * 1.1 + diesel_vec * 0.7 + suv_model_vec * 1.2
+        # Japanese brands
+        "toyota": car_brand_vec + japanese_vec * 1.2,
+        "honda": car_brand_vec + japanese_vec * 1.2,
+        "lexus": car_brand_vec + japanese_vec * 1.1 + luxury_vec * 0.8,
+        "nissan": car_brand_vec + japanese_vec * 1.2,
+        "mazda": car_brand_vec + japanese_vec * 1.1,
+        
+        # German brands
+        "bmw": car_brand_vec + german_vec * 1.2 + luxury_vec * 0.8,
+        "mercedes": car_brand_vec + german_vec * 1.2 + luxury_vec * 1.0,
+        "audi": car_brand_vec + german_vec * 1.2 + luxury_vec * 0.7,
+        "porsche": car_brand_vec + german_vec * 1.1 + sports_vec * 0.8,
+        "volkswagen": car_brand_vec + german_vec * 1.3,
+        
+        # American brands
+        "tesla": car_brand_vec + american_vec * 1.2 + electric_vec * 0.6,
+        "ford": car_brand_vec + american_vec * 1.3,
+        "chevrolet": car_brand_vec + american_vec * 1.2
     })
     
     # Animals & Babies - Enhanced relationships
@@ -253,7 +260,7 @@ with st.sidebar:
     word_sets = {
         "Gender & Royalty": ["king", "queen", "man", "woman", "prince", "princess", "boy", "girl"],
         "Countries & Capitals": ["france", "paris", "germany", "berlin", "japan", "tokyo", "italy", "rome"],
-        "Car Brands by Nationality": ["bmw", "mercedes", "audi", "volkswagen", "toyota", "honda", "lexus", "nissan"],
+        "Car Brands": ["bmw", "mercedes", "audi", "volkswagen", "toyota", "honda", "lexus", "nissan", "ford", "chevrolet"],
         "Animals & Babies": ["dog", "puppy", "cat", "kitten", "lion", "cub", "elephant", "calf"],
         "Sports & Equipment": ["soccer", "goal", "basketball", "hoop", "tennis", "racket", "hockey", "stick"]
     }
