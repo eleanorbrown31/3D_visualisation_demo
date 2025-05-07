@@ -128,14 +128,10 @@ def generate_embeddings():
     # Car related vectors
     car_brand_vec = np.random.normal(0, 1, dim)
     electric_vec = np.random.normal(0, 1, dim)
-    gasoline_vec = np.random.normal(0, 1, dim)
-    diesel_vec = np.random.normal(0, 1, dim)
-    hybrid_vec = np.random.normal(0, 1, dim)
-    size_vec = np.random.normal(0, 1, dim)
     luxury_vec = np.random.normal(0, 1, dim)
-    sports_vec = np.random.normal(0, 1, dim)  # Add this missing vector
+    sports_vec = np.random.normal(0, 1, dim) 
 
-# Add nationality vectors
+    # Add nationality vectors
     german_vec = np.random.normal(0, 1, dim)
     japanese_vec = np.random.normal(0, 1, dim)
     american_vec = np.random.normal(0, 1, dim)
@@ -166,7 +162,7 @@ def generate_embeddings():
     })
     
     # Countries & capitals with meaningful relationships
-    for country, capital in [("france", "paris"), ("germany", "berlin"), ("japan", "tokyo"),
+        for country, capital in [("france", "paris"), ("germany", "berlin"), ("japan", "tokyo"),
                             ("italy", "rome"), ("spain", "madrid"), ("china", "beijing"),
                             ("russia", "moscow"), ("brazil", "brasilia"), ("australia", "canberra"),
                             ("canada", "ottawa")]:
@@ -175,7 +171,7 @@ def generate_embeddings():
         word_to_vec[capital] = capital_vec + 0.8 * country_vector
     
     # Car brands with specific attributes
-    car_attributes = ({
+        car_attributes = ({
         # Japanese brands
         "toyota": car_brand_vec + japanese_vec * 1.2,
         "honda": car_brand_vec + japanese_vec * 1.2,
@@ -195,7 +191,43 @@ def generate_embeddings():
         "ford": car_brand_vec + american_vec * 1.3,
         "chevrolet": car_brand_vec + american_vec * 1.2
     })
-    
+    # Car brands with nationalities - similar to the country/capital pattern
+car_countries = [
+        ("germany", "bmw"),
+        ("germany", "mercedes"),
+        ("germany", "audi"), 
+        ("germany", "volkswagen"),
+        ("germany", "porsche"),
+        ("japan", "toyota"),
+        ("japan", "honda"),
+        ("japan", "lexus"),
+        ("japan", "nissan"),
+        ("japan", "mazda"),
+        ("usa", "ford"),
+        ("usa", "chevrolet"),
+        ("usa", "tesla")
+]
+
+    # Add countries if they're not already defined
+for country, _ in car_countries:
+        if country not in word_to_vec:
+            country_vector = country_vec + np.random.normal(0, 0.1, dim)
+            word_to_vec[country] = country_vector
+
+# Now add car brands with vectors influenced by their country
+    for country, brand in car_countries:
+        country_vector = word_to_vec[country]
+        brand_vector = car_brand_vec + 0.8 * country_vector + np.random.normal(0, 0.1, dim)
+        
+        # Add some special characteristics for certain brands
+        if brand == "bmw" or brand == "mercedes" or brand == "audi" or brand == "lexus":
+            brand_vector += 0.4 * luxury_vec
+        elif brand == "porsche":
+            brand_vector += 0.6 * sports_vec
+        elif brand == "tesla":
+            brand_vector += 0.7 * electric_vec
+        
+    word_to_vec[brand] = brand_vector
     # Animals & Babies - Enhanced relationships
     animals = {
         "dog": ("puppy", 0.9),
