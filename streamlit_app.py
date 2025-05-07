@@ -132,6 +132,7 @@ def generate_embeddings():
     hybrid_vec = np.random.normal(0, 1, dim)
     size_vec = np.random.normal(0, 1, dim)
     luxury_vec = np.random.normal(0, 1, dim)
+    sports_vec = np.random.normal(0, 1, dim)
     
     # Animal related vectors
     animal_vec = np.random.normal(0, 1, dim)
