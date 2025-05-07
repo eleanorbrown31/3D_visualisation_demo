@@ -170,8 +170,9 @@ def generate_embeddings():
         word_to_vec[country] = country_vector
         word_to_vec[capital] = capital_vec + 0.8 * country_vector
     
-    # Car brands with specific attributes
-    car_attributes = ({
+    # Car brands with specific attributes - THIS IS THE FIRST FIX:
+    # Changed from car_attributes = ({...}) to word_to_vec.update({...})
+    word_to_vec.update({
         # Japanese brands
         "toyota": car_brand_vec + japanese_vec * 1.2,
         "honda": car_brand_vec + japanese_vec * 1.2,
@@ -191,6 +192,7 @@ def generate_embeddings():
         "ford": car_brand_vec + american_vec * 1.3,
         "chevrolet": car_brand_vec + american_vec * 1.2
     })
+    
     # Car brands with nationalities - similar to the country/capital pattern
     car_countries = [
         ("germany", "bmw"),
@@ -215,19 +217,22 @@ def generate_embeddings():
             word_to_vec[country] = country_vector
 
     # Now add car brands with vectors influenced by their country
+    # SECOND FIX: We'll skip brands that are already defined above
     for country, brand in car_countries:
-        country_vector = word_to_vec[country]
-        brand_vector = car_brand_vec + 0.8 * country_vector + np.random.normal(0, 0.1, dim)
-        
-        # Add some special characteristics for certain brands
-        if brand == "bmw" or brand == "mercedes" or brand == "audi" or brand == "lexus":
-            brand_vector += 0.4 * luxury_vec
-        elif brand == "porsche":
-            brand_vector += 0.6 * sports_vec
-        elif brand == "tesla":
-            brand_vector += 0.7 * electric_vec
-        
-        word_to_vec[brand] = brand_vector
+        if brand not in word_to_vec:  # Skip if already defined
+            country_vector = word_to_vec[country]
+            brand_vector = car_brand_vec + 0.8 * country_vector + np.random.normal(0, 0.1, dim)
+            
+            # Add some special characteristics for certain brands
+            if brand == "bmw" or brand == "mercedes" or brand == "audi" or brand == "lexus":
+                brand_vector += 0.4 * luxury_vec
+            elif brand == "porsche":
+                brand_vector += 0.6 * sports_vec
+            elif brand == "tesla":
+                brand_vector += 0.7 * electric_vec
+            
+            word_to_vec[brand] = brand_vector
+            
     # Animals & Babies - Enhanced relationships
     animals = {
         "dog": ("puppy", 0.9),
